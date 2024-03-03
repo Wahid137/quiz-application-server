@@ -5,8 +5,13 @@ const cors = require('cors');
 require("dotenv").config();
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
+const corsOptions = {
+    origin: ['https://inspired-digital-dedca.web.app'],
+    optionsSuccessStatus: 200
+};
+
 // Middleware
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 
 

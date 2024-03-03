@@ -1,13 +1,37 @@
-const express = require("express");
+const express = require("express")
 const app = express();
 const port = process.env.PORT || 5000;
-const cors = require('cors');
-require("dotenv").config();
+const cors = require('cors')
+require("dotenv").config()
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
-// Middleware
-app.use(cors());
-app.use(express.json());
+
+// Middleware to enable CORS
+const corsOptions = {
+    origin: 'https://inspired-digital-dedca.web.app/',
+    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
+
+app.use(cors(corsOptions));
+
+//middleware
+app.use(cors())
+app.use(express.json())
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Something went wrong!');
+});
+
+// Improving response format
+app.use((req, res, next) => {
+    res.sendJson = function (data) {
+        res.setHeader('Content-Type', 'application/json');
+        res.send(JSON.stringify(data));
+    };
+    next();
+});
 
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.gfg0jvx.mongodb.net/?retryWrites=true&w=majority`;// Create a MongoClient with a MongoClientOptions object to set the Stable API version
